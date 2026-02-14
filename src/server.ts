@@ -27,7 +27,7 @@ export async function createServer(): Promise<void> {
 
   // Create MCP server
   const server = new McpServer({
-    name: "claude-codex-runner",
+    name: "codex-mcp-runner",
     version: pkg.version,
   });
 

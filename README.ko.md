@@ -1,6 +1,6 @@
-# claude-codex-runner
+# codex-mcp-runner
 
-[![npm version](https://img.shields.io/npm/v/claude-codex-runner.svg)](https://www.npmjs.com/package/claude-codex-runner)
+[![npm version](https://img.shields.io/npm/v/codex-mcp-runner.svg)](https://www.npmjs.com/package/codex-mcp-runner)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [English](README.md) | **한국어**
@@ -9,7 +9,7 @@ Claude가 MCP 프로토콜을 통해 격리된 git worktree에서 병렬로 Open
 
 ## 개요
 
-`claude-codex-runner`는 Claude와 Codex CLI 사이의 작업 조율자 역할을 하는 MCP(Model Context Protocol) 서버입니다. Claude가 다음을 수행할 수 있게 합니다:
+`codex-mcp-runner`는 Claude와 Codex CLI 사이의 작업 조율자 역할을 하는 MCP(Model Context Protocol) 서버입니다. Claude가 다음을 수행할 수 있게 합니다:
 
 - 설정 가능한 동시성으로 여러 Codex 작업을 병렬로 실행
 - 각 작업을 자신의 git worktree에 격리하여 간섭 방지
@@ -27,7 +27,7 @@ Claude (Manager)
     | MCP Protocol (stdio)
     |
     v
-claude-codex-runner (MCP Server)
+codex-mcp-runner (MCP Server)
     |
     +-- Config Validator (security policies, limits)
     |
@@ -81,26 +81,26 @@ echo $CODEX_API_KEY     # should not be empty
 ### 전역 설치 (MCP 서버에 권장)
 
 ```bash
-npm install -g claude-codex-runner
+npm install -g codex-mcp-runner
 ```
 
 그 다음 실행:
 
 ```bash
-claude-codex-runner
+codex-mcp-runner
 ```
 
 ### npx 사용 (설치 불필요)
 
 ```bash
-npx -y claude-codex-runner
+npx -y codex-mcp-runner
 ```
 
 ### 로컬 개발 설치
 
 ```bash
-git clone https://github.com/jsc7727/claude-codex-runner.git
-cd claude-codex-runner
+git clone https://github.com/jsc7727/codex-mcp-runner.git
+cd codex-mcp-runner
 npm install
 npm run build
 npm start
@@ -117,7 +117,7 @@ npm start
   "mcpServers": {
     "codex-runner": {
       "command": "npx",
-      "args": ["-y", "claude-codex-runner"],
+      "args": ["-y", "codex-mcp-runner"],
       "env": {
         "CODEX_API_KEY": "your-openai-api-key-here"
       }
@@ -138,7 +138,7 @@ Claude Desktop을 다시 시작합니다. 이제 `run_codex_tasks` 및 `review_p
     {
       "name": "codex-runner",
       "command": "npx",
-      "args": ["-y", "claude-codex-runner"],
+      "args": ["-y", "codex-mcp-runner"],
       "env": {
         "CODEX_API_KEY": "your-openai-api-key-here"
       }
@@ -149,7 +149,7 @@ Claude Desktop을 다시 시작합니다. 이제 `run_codex_tasks` 및 `review_p
 
 ## 프로젝트 구성
 
-저장소 루트의 `.mcp-codex.json` 파일로 `claude-codex-runner` 동작을 구성합니다.
+저장소 루트의 `.mcp-codex.json` 파일로 `codex-mcp-runner` 동작을 구성합니다.
 
 ### 구성 파일 예시
 
@@ -323,7 +323,7 @@ const review = await mcp.callTool("review_plan_with_codex", {
 
 ## 보안
 
-`claude-codex-runner`는 안전한 코드 실행을 보장하기 위해 6가지 방어 계층을 구현합니다:
+`codex-mcp-runner`는 안전한 코드 실행을 보장하기 위해 6가지 방어 계층을 구현합니다:
 
 ### 계층 1: 사전 검증
 
@@ -372,8 +372,8 @@ const review = await mcp.callTool("review_plan_with_codex", {
 ### 복제 및 설정
 
 ```bash
-git clone https://github.com/jsc7727/claude-codex-runner.git
-cd claude-codex-runner
+git clone https://github.com/jsc7727/codex-mcp-runner.git
+cd codex-mcp-runner
 npm install
 ```
 
@@ -425,7 +425,7 @@ npm start
 ### 프로젝트 구조
 
 ```
-claude-codex-runner/
+codex-mcp-runner/
 ├── src/
 │   ├── index.ts                 # Entry point
 │   ├── server.ts                # MCP server setup
@@ -464,7 +464,7 @@ claude-codex-runner/
 
 ```bash
 export CODEX_API_KEY=sk-...
-npx claude-codex-runner
+npx codex-mcp-runner
 ```
 
 또는 Claude Desktop 구성에서:

@@ -1,5 +1,5 @@
 {
-  "name": "claude-codex-runner",
+  "name": "codex-mcp-runner",
   "version": "0.1.0",
   "description": "MCP server for orchestrating parallel OpenAI Codex CLI tasks with git worktree isolation",
   "type": "module",
@@ -7,11 +7,11 @@
   "author": "jsc7727",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jsc7727/claude-codex-runner.git"
+    "url": "https://github.com/jsc7727/codex-mcp-runner.git"
   },
-  "homepage": "https://github.com/jsc7727/claude-codex-runner#readme",
+  "homepage": "https://github.com/jsc7727/codex-mcp-runner#readme",
   "bugs": {
-    "url": "https://github.com/jsc7727/claude-codex-runner/issues"
+    "url": "https://github.com/jsc7727/codex-mcp-runner/issues"
   },
   "keywords": [
     "mcp",
@@ -29,7 +29,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "claude-codex-runner": "dist/index.js"
+    "codex-mcp-runner": "dist/index.js"
   },
   "files": [
     "dist",

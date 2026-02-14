@@ -1,6 +1,6 @@
-# claude-codex-runner
+# codex-mcp-runner
 
-[![npm version](https://img.shields.io/npm/v/claude-codex-runner.svg)](https://www.npmjs.com/package/claude-codex-runner)
+[![npm version](https://img.shields.io/npm/v/codex-mcp-runner.svg)](https://www.npmjs.com/package/codex-mcp-runner)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **English** | [한국어](README.ko.md)
@@ -9,7 +9,7 @@ MCP server that enables Claude to orchestrate parallel OpenAI Codex CLI tasks in
 
 ## Overview
 
-`claude-codex-runner` is an MCP (Model Context Protocol) server that acts as a task orchestrator between Claude and the Codex CLI. It allows Claude to:
+`codex-mcp-runner` is an MCP (Model Context Protocol) server that acts as a task orchestrator between Claude and the Codex CLI. It allows Claude to:
 
 - Run multiple Codex tasks in parallel with configurable concurrency
 - Isolate each task in its own git worktree to prevent interference
@@ -27,7 +27,7 @@ Claude (Manager)
     | MCP Protocol (stdio)
     |
     v
-claude-codex-runner (MCP Server)
+codex-mcp-runner (MCP Server)
     |
     +-- Config Validator (security policies, limits)
     |
@@ -81,26 +81,26 @@ echo $CODEX_API_KEY     # should not be empty
 ### Global Installation (Recommended for MCP servers)
 
 ```bash
-npm install -g claude-codex-runner
+npm install -g codex-mcp-runner
 ```
 
 Then run:
 
 ```bash
-claude-codex-runner
+codex-mcp-runner
 ```
 
 ### Using npx (No Installation)
 
 ```bash
-npx -y claude-codex-runner
+npx -y codex-mcp-runner
 ```
 
 ### Local Development Installation
 
 ```bash
-git clone https://github.com/jsc7727/claude-codex-runner.git
-cd claude-codex-runner
+git clone https://github.com/jsc7727/codex-mcp-runner.git
+cd codex-mcp-runner
 npm install
 npm run build
 npm start
@@ -117,7 +117,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
   "mcpServers": {
     "codex-runner": {
       "command": "npx",
-      "args": ["-y", "claude-codex-runner"],
+      "args": ["-y", "codex-mcp-runner"],
       "env": {
         "CODEX_API_KEY": "your-openai-api-key-here"
       }
@@ -138,7 +138,7 @@ Add the following to your `.claude/agents.json` or in agent configuration:
     {
       "name": "codex-runner",
       "command": "npx",
-      "args": ["-y", "claude-codex-runner"],
+      "args": ["-y", "codex-mcp-runner"],
       "env": {
         "CODEX_API_KEY": "your-openai-api-key-here"
       }
@@ -149,7 +149,7 @@ Add the following to your `.claude/agents.json` or in agent configuration:
 
 ## Project Configuration
 
-Configure `claude-codex-runner` behavior with a `.mcp-codex.json` file in your repository root.
+Configure `codex-mcp-runner` behavior with a `.mcp-codex.json` file in your repository root.
 
 ### Configuration File Example
 
@@ -323,7 +323,7 @@ const review = await mcp.callTool("review_plan_with_codex", {
 
 ## Security
 
-The `claude-codex-runner` implements six layers of defense to ensure safe code execution:
+The `codex-mcp-runner` implements six layers of defense to ensure safe code execution:
 
 ### Layer 1: Pre-flight Validation
 
@@ -372,8 +372,8 @@ The `claude-codex-runner` implements six layers of defense to ensure safe code e
 ### Clone and Setup
 
 ```bash
-git clone https://github.com/jsc7727/claude-codex-runner.git
-cd claude-codex-runner
+git clone https://github.com/jsc7727/codex-mcp-runner.git
+cd codex-mcp-runner
 npm install
 ```
 
@@ -425,7 +425,7 @@ npm start
 ### Project Structure
 
 ```
-claude-codex-runner/
+codex-mcp-runner/
 ├── src/
 │   ├── index.ts                 # Entry point
 │   ├── server.ts                # MCP server setup
@@ -464,7 +464,7 @@ claude-codex-runner/
 
 ```bash
 export CODEX_API_KEY=sk-...
-npx claude-codex-runner
+npx codex-mcp-runner
 ```
 
 Or in Claude Desktop config:
