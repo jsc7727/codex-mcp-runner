@@ -1,0 +1,26 @@
+{
+  "allowed_commands": [
+    "npm test",
+    "npm run lint",
+    "npm run build",
+    "npx tsc --noEmit",
+    "npx vitest run"
+  ],
+  "default_allowed_paths": [
+    "src/**",
+    "tests/**",
+    "package.json",
+    "tsconfig.json"
+  ],
+  "default_concurrency": 2,
+  "default_timeout_sec": 300,
+  "resource_policy": "conservative",
+  "network_policy": "deny",
+  "codex_command": "codex",
+  "codex_model": "o4-mini",
+  "codex_full_auto": true,
+  "codex_ephemeral": true,
+  "sandbox_mode": "workspace-write",
+  "max_runs_retained": 20,
+  "max_tasks_per_run": 10
+}

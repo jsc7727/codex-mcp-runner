@@ -1,0 +1,4 @@
+{"type":"thread.started","thread_id":"0199b456-90ab-7800-9cc2-def1234567ab"}
+{"type":"turn.started"}
+{"type":"error","message":"Model 'o1-pro' is not available for this account."}
+{"type":"turn.failed","error":{"message":"Model not available"}}

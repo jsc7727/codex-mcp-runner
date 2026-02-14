@@ -1,0 +1,11 @@
+{"type":"thread.started","thread_id":"0199c789-12cd-7800-aee3-456789abcdef"}
+{"type":"turn.started"}
+{"type":"item.started","item":{"id":"item_1","type":"command_execution","command":"bash -lc npm test","status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_1","type":"command_execution","command":"bash -lc npm test","status":"completed","exit_code":1}}
+{"type":"item.completed","item":{"id":"item_2","type":"agent_message","text":"Tests failed. Attempting fix...","status":"completed"}}
+{"type":"item.started","item":{"id":"item_3","type":"file_change","path":"src/utils.ts","status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_3","type":"file_change","path":"src/utils.ts","status":"completed"}}
+{"type":"item.started","item":{"id":"item_4","type":"command_execution","command":"bash -lc npm test","status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_4","type":"command_execution","command":"bash -lc npm test","status":"completed","exit_code":0}}
+{"type":"item.completed","item":{"id":"item_5","type":"agent_message","text":"Fixed the failing test and verified it passes.","status":"completed"}}
+{"type":"turn.completed","usage":{"input_tokens":35000,"cached_input_tokens":30000,"output_tokens":250}}

@@ -1,0 +1,30 @@
+{
+  "name": "claude-codex-runner",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "main": "dist/index.js",
+  "bin": {
+    "claude-codex-runner": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "nanoid": "^5.1.6",
+    "p-limit": "^7.3.0",
+    "picomatch": "^4.0.3",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.3",
+    "@types/picomatch": "^4.0.2",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}
