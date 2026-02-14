@@ -1,18 +1,48 @@
 {
   "name": "claude-codex-runner",
   "version": "0.1.0",
+  "description": "MCP server for orchestrating parallel OpenAI Codex CLI tasks with git worktree isolation",
   "type": "module",
-  "private": true,
+  "license": "MIT",
+  "author": "jsc7727",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsc7727/claude-codex-runner.git"
+  },
+  "homepage": "https://github.com/jsc7727/claude-codex-runner#readme",
+  "bugs": {
+    "url": "https://github.com/jsc7727/claude-codex-runner/issues"
+  },
+  "keywords": [
+    "mcp",
+    "codex",
+    "openai",
+    "claude",
+    "git",
+    "worktree",
+    "parallel",
+    "cli"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "claude-codex-runner": "dist/index.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsc --watch",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build && npm test"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0",

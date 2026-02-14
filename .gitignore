@@ -3,3 +3,7 @@ dist/
 .codex-worktrees/
 .codex-runs/
 *.tsbuildinfo
+.omc/
+.env
+.env.*
+*.log

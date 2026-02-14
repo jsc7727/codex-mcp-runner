@@ -1,6 +1,9 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
+import { readFileSync } from "node:fs";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { RunCodexTasksInputSchema } from "./types.js";
 import { loadConfig } from "./config.js";
 import { validateEnvironment } from "./startup.js";
@@ -18,10 +21,14 @@ export async function createServer(): Promise<void> {
   // Prune stale worktrees from previous crashes
   await pruneStaleWorktrees();
 
+  // Read version from package.json
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const pkg = JSON.parse(readFileSync(join(__dirname, "../package.json"), "utf-8"));
+
   // Create MCP server
   const server = new McpServer({
     name: "claude-codex-runner",
-    version: "0.1.0",
+    version: pkg.version,
   });
 
   // Register run_codex_tasks tool
