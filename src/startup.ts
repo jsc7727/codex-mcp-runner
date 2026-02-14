@@ -44,7 +44,7 @@ export async function validateEnvironment(
 
   // Check 3: codex CLI in PATH
   const codexResult = await exec(config.codex_command, ["--version"]);
-  if (codexResult.exitCode !== 0 && codexResult.exitCode !== null) {
+  if (codexResult.exitCode !== 0) {
     throw new StartupError(
       `Codex CLI not found (command: "${config.codex_command}"). Install with: npm install -g @openai/codex`
     );

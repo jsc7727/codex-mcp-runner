@@ -110,38 +110,40 @@ export async function runCodexTask(
   const allFilesChanged = [...new Set([...filesChanged, ...parsed.files_changed])];
 
   // Post-execution security validation
-  const allowedPaths = task.allowed_paths ?? config.default_allowed_paths;
-  const allowedCommands = task.allowed_commands ?? config.allowed_commands;
+  const allowedPaths = (task.allowed_paths && task.allowed_paths.length > 0)
+    ? task.allowed_paths
+    : config.default_allowed_paths;
+  const allowedCommands = (task.allowed_commands && task.allowed_commands.length > 0)
+    ? task.allowed_commands
+    : config.allowed_commands;
   let violations: SecurityViolation[] = [];
 
-  if (status !== "timeout") {
-    violations = validatePostExecution(
-      parsed,
-      allowedCommands,
-      allowedPaths,
-      repoRoot
-    );
+  violations = validatePostExecution(
+    { ...parsed, files_changed: allFilesChanged },
+    allowedCommands,
+    allowedPaths,
+    repoRoot
+  );
 
-    if (violations.length > 0) {
-      status = "failed";
-      const violationDetails = violations
-        .map(v => `[${v.type.toUpperCase()}] ${v.detail}`)
-        .join("\n");
-      notesForManager += "\n[SECURITY VIOLATIONS]\n" + violationDetails;
-    }
+  if (violations.length > 0) {
+    status = "failed";
+    const violationDetails = violations
+      .map(v => `[${v.type.toUpperCase()}] ${v.detail}`)
+      .join("\n");
+    notesForManager += "\n[SECURITY VIOLATIONS]\n" + violationDetails;
   }
 
   // Build tail (last ~50 lines of combined stdout/stderr)
   const combinedOutput = (result.stdout + "\n" + result.stderr).trim();
   const tailLines = combinedOutput.split("\n").slice(-50).join("\n");
 
-  // Build the task result with redacted fields
+  // Build the task result with unredacted patch (caller redacts after validation)
   return {
     task_id: task.task_id,
     status,
     exit_code: result.exitCode,
     files_changed: allFilesChanged,
-    patch: redact(patch),
+    patch: patch,
     patch_applicable: false, // Will be set by patch-validator later
     apply_check_log: "",     // Will be set by patch-validator later
     commands_run: parsed.commands_run,

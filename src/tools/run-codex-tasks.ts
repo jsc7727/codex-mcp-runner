@@ -8,6 +8,7 @@ import { createRunLogger } from "../logger.js";
 import { activeRuns } from "../active-runs.js";
 import { InputValidationError } from "../errors.js";
 import { validatePatch } from "../patch-validator.js";
+import { redact } from "../log-redactor.js";
 import type { RunCodexTasksInput, RunCodexTasksOutput, TaskResult } from "../types.js";
 
 export async function handleRunCodexTasks(
@@ -135,6 +136,9 @@ export async function handleRunCodexTasks(
               result.apply_check_log = err instanceof Error ? err.message : String(err);
             }
           }
+
+          // Redact patch after validation
+          result.patch = redact(result.patch);
 
           await logger.writeTaskResult(task.task_id, result);
           await logger.log("info", `Task ${task.task_id} completed: ${result.status}`, undefined, task.task_id);

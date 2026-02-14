@@ -58,14 +58,56 @@ Respond ONLY with a JSON object matching this schema:
       env,
     });
 
+    // Check for Codex process failure
+    if (result.timedOut) {
+      return {
+        report: {
+          missing_tasks: [],
+          dependency_issues: [],
+          parallelization_suggestions: [],
+          test_gaps: [],
+          risk_flags: ["Codex review timed out after 120 seconds"],
+          recommended_task_splits: [],
+        },
+      };
+    }
+
+    if (result.exitCode !== 0) {
+      const errorDetail = result.stderr.trim() || `Codex exited with code ${result.exitCode}`;
+      return {
+        report: {
+          missing_tasks: [],
+          dependency_issues: [],
+          parallelization_suggestions: [],
+          test_gaps: [],
+          risk_flags: [`Codex review failed: ${errorDetail}`],
+          recommended_task_splits: [],
+        },
+      };
+    }
+
     // Parse JSONL to get the agent's response
     const parsed = parseCodexOutput(result.stdout);
+
+    if (parsed.errors.length > 0) {
+      return {
+        report: {
+          missing_tasks: [],
+          dependency_issues: [],
+          parallelization_suggestions: [],
+          test_gaps: [],
+          risk_flags: parsed.errors.map(e => `Codex error: ${e}`),
+          recommended_task_splits: [],
+        },
+      };
+    }
+
     const responseText = parsed.summary;
 
     // Try to extract JSON from the response
     try {
       // Look for JSON in the response (may be wrapped in markdown code blocks)
-      const jsonMatch = responseText.match(/\{[\s\S]*?\}/);
+      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         const report = JSON.parse(jsonMatch[0]);
         return {

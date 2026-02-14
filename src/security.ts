@@ -128,8 +128,12 @@ export function validateTaskInput(
   config: CodexConfig,
   repoRoot: string
 ): void {
-  const allowedPaths = task.allowed_paths ?? config.default_allowed_paths;
-  const allowedCommands = task.allowed_commands ?? config.allowed_commands;
+  const allowedPaths = (task.allowed_paths && task.allowed_paths.length > 0)
+    ? task.allowed_paths
+    : config.default_allowed_paths;
+  const allowedCommands = (task.allowed_commands && task.allowed_commands.length > 0)
+    ? task.allowed_commands
+    : config.allowed_commands;
 
   // Validate that the configured paths are reasonable (no traversal in patterns themselves)
   // Note: we validate the patterns, not actual file paths here
