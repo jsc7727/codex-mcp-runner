@@ -65,7 +65,9 @@ Each task runs independently in its own isolated worktree, preventing state leak
 - **Node.js** >= 18.0.0
 - **Git** (with worktree support)
 - **OpenAI Codex CLI** (installed and in PATH)
-- **CODEX_API_KEY** environment variable set with valid OpenAI API key
+- **Authentication** (one of the following):
+  - `CODEX_API_KEY` environment variable with valid OpenAI API key, OR
+  - `codex login` (OAuth-based authentication)
 
 ### Verify Prerequisites
 
@@ -73,7 +75,7 @@ Each task runs independently in its own isolated worktree, preventing state leak
 node --version          # >= 18.0.0
 git --version           # any recent version
 which codex             # should return path to codex binary
-echo $CODEX_API_KEY     # should not be empty
+codex auth status       # check authentication status
 ```
 
 ## Installation
@@ -456,18 +458,24 @@ codex-mcp-runner/
 
 ## Troubleshooting
 
-### CODEX_API_KEY Not Set
+### Authentication Not Found
 
-**Error:** `Error: CODEX_API_KEY environment variable is not set`
+**Error:** `No Codex authentication found. Set CODEX_API_KEY environment variable or run 'codex login'.`
 
-**Solution:** Set the environment variable before running:
+**Solution (Option 1 - OAuth):** Run Codex login once:
+
+```bash
+codex login
+```
+
+**Solution (Option 2 - API Key):** Set the environment variable:
 
 ```bash
 export CODEX_API_KEY=sk-...
 npx codex-mcp-runner
 ```
 
-Or in Claude Desktop config:
+Or in MCP client config:
 
 ```json
 "env": { "CODEX_API_KEY": "sk-..." }

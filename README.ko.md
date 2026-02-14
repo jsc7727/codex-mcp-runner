@@ -65,7 +65,9 @@ Task 3 (Worktree C) --> Codex CLI --> [Execution + Logs]
 - **Node.js** >= 18.0.0
 - **Git** (worktree 지원 포함)
 - **OpenAI Codex CLI** (설치됨 및 PATH에 있음)
-- **CODEX_API_KEY** 환경 변수가 유효한 OpenAI API 키로 설정
+- **인증** (다음 중 하나):
+  - `CODEX_API_KEY` 환경 변수에 유효한 OpenAI API 키 설정, 또는
+  - `codex login` (OAuth 기반 인증)
 
 ### 사전 요구사항 확인
 
@@ -73,7 +75,7 @@ Task 3 (Worktree C) --> Codex CLI --> [Execution + Logs]
 node --version          # >= 18.0.0
 git --version           # any recent version
 which codex             # should return path to codex binary
-echo $CODEX_API_KEY     # should not be empty
+codex auth status       # 인증 상태 확인
 ```
 
 ## 설치
@@ -456,18 +458,24 @@ codex-mcp-runner/
 
 ## 문제 해결
 
-### CODEX_API_KEY 설정 안 됨
+### 인증을 찾을 수 없음
 
-**오류:** `Error: CODEX_API_KEY environment variable is not set`
+**오류:** `No Codex authentication found. Set CODEX_API_KEY environment variable or run 'codex login'.`
 
-**해결책:** 실행 전 환경 변수를 설정합니다:
+**해결책 (방법 1 - OAuth):** Codex 로그인을 한번 실행합니다:
+
+```bash
+codex login
+```
+
+**해결책 (방법 2 - API 키):** 환경 변수를 설정합니다:
 
 ```bash
 export CODEX_API_KEY=sk-...
 npx codex-mcp-runner
 ```
 
-또는 Claude Desktop 구성에서:
+또는 MCP 클라이언트 설정에서:
 
 ```json
 "env": { "CODEX_API_KEY": "sk-..." }
