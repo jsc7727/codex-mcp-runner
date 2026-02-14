@@ -80,6 +80,11 @@ describe("sanitizeEnvironment", () => {
     expect(env.OPENAI_API_KEY).toBeUndefined();
   });
 
+  it("passes through NODE_ENV", () => {
+    const env = sanitizeEnvironment({ NODE_ENV: "production", PATH: "/usr/bin" } as any);
+    expect(env.NODE_ENV).toBe("production");
+  });
+
   it("strips secret-pattern vars", () => {
     const env = sanitizeEnvironment({
       MY_SECRET: "s1",

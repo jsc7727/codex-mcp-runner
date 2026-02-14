@@ -8,7 +8,7 @@ const SHELL_METACHARACTERS = /[;|&$()<>`\n]/;
 
 // Environment variable allowlist
 const ENV_ALLOWLIST = new Set([
-  "PATH", "HOME", "USER", "LANG", "TERM", "SHELL", "TMPDIR",
+  "PATH", "HOME", "USER", "LANG", "TERM", "SHELL", "TMPDIR", "NODE_ENV",
 ]);
 
 // Patterns for secret env var names to strip
