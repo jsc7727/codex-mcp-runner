@@ -1,6 +1,6 @@
 {
   "name": "codex-mcp-runner",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "MCP server for orchestrating parallel OpenAI Codex CLI tasks with git worktree isolation",
   "type": "module",
   "license": "MIT",
