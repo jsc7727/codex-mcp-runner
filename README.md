@@ -3,6 +3,8 @@
 [![npm version](https://img.shields.io/npm/v/claude-codex-runner.svg)](https://www.npmjs.com/package/claude-codex-runner)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+**English** | [한국어](README.ko.md)
+
 MCP server that enables Claude to orchestrate parallel OpenAI Codex CLI tasks in isolated git worktrees.
 
 ## Overview
