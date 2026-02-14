@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { nanoid } from "nanoid";
 import { exec } from "./utils/exec.js";
+import { sanitizeEnvironment } from "./security.js";
 import type { PatchValidationResult } from "./types.js";
 
 export async function validatePatch(
@@ -20,10 +21,9 @@ export async function validatePatch(
   try {
     // Create a temp index from base_ref to validate against clean state
     const tmpIndex = join(tmpdir(), `index-${nanoid()}`);
+    const baseEnv = sanitizeEnvironment(process.env);
     const env: Record<string, string> = {
-      ...Object.fromEntries(
-        Object.entries(process.env).filter((entry): entry is [string, string] => entry[1] !== undefined)
-      ),
+      ...baseEnv,
       GIT_INDEX_FILE: tmpIndex,
     };
 

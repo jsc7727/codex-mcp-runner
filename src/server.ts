@@ -27,6 +27,7 @@ export async function createServer(): Promise<void> {
   // Register run_codex_tasks tool
   server.tool(
     "run_codex_tasks",
+    "Run parallel Codex CLI tasks in isolated git worktrees. task_id values must be unique within a run.",
     RunCodexTasksInputSchema.shape,
     async (params) => {
       try {
@@ -50,6 +51,7 @@ export async function createServer(): Promise<void> {
   // Register review_plan_with_codex tool
   server.tool(
     "review_plan_with_codex",
+    "Review a development plan using Codex CLI to identify missing tasks, dependency issues, parallelization opportunities, test gaps, and risks.",
     {
       plan_text: z.string().min(1).describe("The development plan text to review"),
       repo_context: z.string().optional().describe("Optional repository context for the review"),

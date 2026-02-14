@@ -1,22 +1,15 @@
-const PATTERNS: RegExp[] = [
-  // API keys (OpenAI/Codex style)
-  /sk-[a-zA-Z0-9]{20,}/g,
-  // CODEX_API_KEY=... or OPENAI_API_KEY=...
-  /(?:CODEX_API_KEY|OPENAI_API_KEY)=[^\s]+/g,
-  // Bearer tokens
-  /Bearer\s+[a-zA-Z0-9._-]+/g,
-  // Private key blocks
-  /-----BEGIN [A-Z ]+PRIVATE KEY-----[\s\S]*?-----END [A-Z ]+PRIVATE KEY-----/g,
-  // Generic secret env vars
-  /[a-zA-Z_]*(?:SECRET|TOKEN|PASSWORD|KEY)=[^\s]+/g,
+const PATTERN_SOURCES: Array<[string, string]> = [
+  [String.raw`sk-[a-zA-Z0-9]{20,}`, "g"],
+  [String.raw`(?:CODEX_API_KEY|OPENAI_API_KEY)=[^\s]+`, "g"],
+  [String.raw`Bearer\s+[a-zA-Z0-9._-]+`, "g"],
+  [String.raw`-----BEGIN [A-Z ]+PRIVATE KEY-----[\s\S]*?-----END [A-Z ]+PRIVATE KEY-----`, "g"],
+  [String.raw`[a-zA-Z_]*(?:SECRET|TOKEN|PASSWORD|KEY)=[^\s]+`, "g"],
 ];
 
 export function redact(text: string): string {
   let result = text;
-  for (const pattern of PATTERNS) {
-    // Reset lastIndex for global regexps
-    pattern.lastIndex = 0;
-    result = result.replace(pattern, "[REDACTED]");
+  for (const [source, flags] of PATTERN_SOURCES) {
+    result = result.replace(new RegExp(source, flags), "[REDACTED]");
   }
   return result;
 }

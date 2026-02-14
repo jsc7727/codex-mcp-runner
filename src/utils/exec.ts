@@ -22,6 +22,8 @@ export async function exec(
     let stderr = "";
     let stdoutLen = 0;
     let stderrLen = 0;
+    let stdoutTruncated = false;
+    let stderrTruncated = false;
     let timedOut = false;
     let killTimer: ReturnType<typeof setTimeout> | undefined;
 
@@ -30,6 +32,8 @@ export async function exec(
       if (stdoutLen + str.length <= maxBuffer) {
         stdout += str;
         stdoutLen += str.length;
+      } else if (!stdoutTruncated) {
+        stdoutTruncated = true;
       }
     });
 
@@ -38,6 +42,8 @@ export async function exec(
       if (stderrLen + str.length <= maxBuffer) {
         stderr += str;
         stderrLen += str.length;
+      } else if (!stderrTruncated) {
+        stderrTruncated = true;
       }
     });
 
@@ -56,6 +62,8 @@ export async function exec(
     child.on("close", (code) => {
       if (timeoutHandle) clearTimeout(timeoutHandle);
       if (killTimer) clearTimeout(killTimer);
+      if (stdoutTruncated) stdout += "\n[OUTPUT TRUNCATED]";
+      if (stderrTruncated) stderr += "\n[OUTPUT TRUNCATED]";
       resolve({
         stdout,
         stderr,

@@ -17,6 +17,6 @@ export async function loadConfig(cwd?: string): Promise<CodexConfig> {
       // No config file -- use defaults
       return CodexConfigSchema.parse({});
     }
-    throw err;
+    throw new Error(`Failed to load config from ${configPath}: ${err instanceof Error ? err.message : String(err)}`);
   }
 }

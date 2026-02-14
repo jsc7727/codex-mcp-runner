@@ -1,7 +1,7 @@
 import { z } from "zod";
+import { SAFE_ID_REGEX } from "./utils/id.js";
 
 // --- ID Sanitization ---
-const SAFE_ID_REGEX = /^[A-Za-z0-9._-]{1,64}$/;
 
 export const SafeIdSchema = z.string()
   .min(1)

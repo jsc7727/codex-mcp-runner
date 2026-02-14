@@ -33,6 +33,14 @@ describe("validateAllowedCommands", () => {
     expect(() => validateAllowedCommands(["npm test --verbose"], allowlist)).not.toThrow();
   });
 
+  it("rejects command that has allowlist entry as prefix without space boundary", () => {
+    expect(() => validateAllowedCommands(["npm testing"], allowlist)).toThrow(SecurityError);
+  });
+
+  it("allows exact command match", () => {
+    expect(() => validateAllowedCommands(["npm test"], allowlist)).not.toThrow();
+  });
+
   it("rejects commands not in allowlist", () => {
     expect(() => validateAllowedCommands(["rm -rf /"], allowlist)).toThrow(SecurityError);
   });

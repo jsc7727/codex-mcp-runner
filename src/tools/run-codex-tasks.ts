@@ -1,7 +1,7 @@
 import pLimit from "p-limit";
 import { generateRunId, sanitizeId } from "../utils/id.js";
 import { loadConfig } from "../config.js";
-import { createWorktree, removeWorktree, cleanupRun } from "../worktree.js";
+import { createWorktree, cleanupRun } from "../worktree.js";
 import { runCodexTask } from "../codex-runner.js";
 import { validateTaskInput } from "../security.js";
 import { createRunLogger } from "../logger.js";
@@ -158,9 +158,6 @@ export async function handleRunCodexTasks(
           };
           await logger.writeTaskResult(task.task_id, failResult);
           return failResult;
-        } finally {
-          // Per-task worktree cleanup
-          await removeWorktree(worktreePath, repoRoot).catch(() => {});
         }
       }))
     );

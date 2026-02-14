@@ -69,7 +69,9 @@ export function validateAllowedCommands(
 
     // Step 2: Check prefix match against allowlist
     if (allowlist.length > 0) {
-      const allowed = allowlist.some(prefix => cmd.startsWith(prefix));
+      const allowed = allowlist.some(prefix =>
+        cmd === prefix || cmd.startsWith(prefix + " ")
+      );
       if (!allowed) {
         throw new SecurityError(
           `Command not in allowlist: "${cmd}". ` +

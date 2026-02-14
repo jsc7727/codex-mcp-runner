@@ -19,6 +19,8 @@ function buildCodexArgs(task: TaskInput, worktreePath: string, config: CodexConf
       args.push("--sandbox", config.sandbox_mode);
     }
   } else {
+    // WARNING: Bypassing all Codex safety guardrails
+    console.error("[SECURITY WARNING] codex_full_auto=false: using --dangerously-bypass-approvals-and-sandbox. All Codex sandbox protections are disabled.");
     args.push("--dangerously-bypass-approvals-and-sandbox");
   }
 

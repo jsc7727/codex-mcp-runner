@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { InputValidationError } from "../errors.js";
 
-const SAFE_ID_REGEX = /^[A-Za-z0-9._-]{1,64}$/;
+export const SAFE_ID_REGEX = /^[A-Za-z0-9._-]{1,64}$/;
 
 export function generateRunId(): string {
   return nanoid(12);

@@ -58,7 +58,8 @@ export async function createRunLogger(runId: string, baseDir?: string): Promise<
 
     async enforceRetention(maxRuns: number) {
       try {
-        const entries = await readdir(runsDir);
+        const dirents = await readdir(runsDir, { withFileTypes: true });
+        const entries = dirents.filter(d => d.isDirectory()).map(d => d.name);
         if (entries.length <= maxRuns) return;
 
         // Read _created_at timestamps for sorting

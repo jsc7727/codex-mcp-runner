@@ -1,4 +1,4 @@
-import type { ParsedCodexOutput, CodexEvent, CommandRecord, CommandExecutionItem, AgentMessageItem, FileChangeItem, UsageInfo } from "./types.js";
+import type { ParsedCodexOutput, CodexEvent, CommandRecord, CommandExecutionItem, AgentMessageItem, FileChangeItem, UsageInfo, CodexItem } from "./types.js";
 
 export function parseCodexOutput(jsonlStdout: string): ParsedCodexOutput {
   const commands_run: CommandRecord[] = [];
@@ -33,7 +33,7 @@ export function parseCodexOutput(jsonlStdout: string): ParsedCodexOutput {
 
     switch (event.type) {
       case "item.started": {
-        const item = (event as { type: "item.started"; item: any }).item;
+        const item = (event as { type: "item.started"; item: CodexItem }).item;
         if (item?.type === "command_execution") {
           const cmdItem = item as CommandExecutionItem;
           commandMap.set(cmdItem.id, { cmd: cmdItem.command, exit_code: null });
@@ -42,7 +42,7 @@ export function parseCodexOutput(jsonlStdout: string): ParsedCodexOutput {
       }
 
       case "item.completed": {
-        const item = (event as { type: "item.completed"; item: any }).item;
+        const item = (event as { type: "item.completed"; item: CodexItem }).item;
         if (!item) break;
 
         if (item.type === "command_execution") {
@@ -57,7 +57,9 @@ export function parseCodexOutput(jsonlStdout: string): ParsedCodexOutput {
           }
         } else if (item.type === "agent_message") {
           const msgItem = item as AgentMessageItem;
-          summary = msgItem.text || "";
+          if (msgItem.text) {
+            summary = msgItem.text; // Keep last non-empty agent message as summary
+          }
         } else if (item.type === "file_change") {
           const fileItem = item as FileChangeItem;
           if (fileItem.path) {

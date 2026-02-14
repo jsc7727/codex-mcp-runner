@@ -70,14 +70,38 @@ export async function pruneStaleWorktrees(repoRoot?: string): Promise<void> {
   // Prune git worktree records for removed directories
   await exec("git", ["worktree", "prune"], { cwd: root });
 
-  // Clean up any orphaned directories
+  // Get list of registered worktrees
+  const listResult = await exec("git", ["worktree", "list", "--porcelain"], { cwd: root });
+  const registeredPaths = new Set(
+    listResult.stdout.split("\n")
+      .filter(l => l.startsWith("worktree "))
+      .map(l => l.slice("worktree ".length))
+  );
+
+  // Clean up orphaned directories (not registered as git worktrees)
   const worktreesDir = resolve(root, WORKTREES_DIR);
   try {
-    const entries = await readdir(worktreesDir);
-    for (const entry of entries) {
-      // Try to remove -- if it's a valid worktree, git worktree remove will handle it
-      const entryPath = join(worktreesDir, entry);
-      await removeDir(entryPath);
+    const runDirs = await readdir(worktreesDir);
+    for (const runDir of runDirs) {
+      const runDirPath = join(worktreesDir, runDir);
+      try {
+        const taskDirs = await readdir(runDirPath);
+        let allOrphaned = true;
+        for (const taskDir of taskDirs) {
+          const taskDirPath = join(runDirPath, taskDir);
+          if (registeredPaths.has(taskDirPath)) {
+            allOrphaned = false;
+          } else {
+            await removeDir(taskDirPath);
+          }
+        }
+        // Remove the run directory if all its task dirs are orphaned
+        if (allOrphaned) {
+          await removeDir(runDirPath);
+        }
+      } catch {
+        // Skip entries that aren't directories
+      }
     }
   } catch {
     // Directory may not exist (first run)

@@ -65,7 +65,7 @@ Respond ONLY with a JSON object matching this schema:
     // Try to extract JSON from the response
     try {
       // Look for JSON in the response (may be wrapped in markdown code blocks)
-      const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+      const jsonMatch = responseText.match(/\{[\s\S]*?\}/);
       if (jsonMatch) {
         const report = JSON.parse(jsonMatch[0]);
         return {
