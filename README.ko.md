@@ -1,23 +1,42 @@
 # codex-mcp-runner
 
 [![npm version](https://img.shields.io/npm/v/codex-mcp-runner.svg)](https://www.npmjs.com/package/codex-mcp-runner)
+[![npm downloads](https://img.shields.io/npm/dm/codex-mcp-runner.svg)](https://www.npmjs.com/package/codex-mcp-runner)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [English](README.md) | **한국어**
 
-Claude가 MCP 프로토콜을 통해 격리된 git worktree에서 병렬로 OpenAI Codex CLI 작업을 조율할 수 있게 해주는 MCP 서버입니다.
+> Codex CLI 병렬 실행을 **안전하게** — git worktree 격리와 6단계 보안으로.
+
+## 왜 필요한가?
+
+`codex exec`를 여러 개 동시에 돌리는 건 가능하지만, **불안정합니다**:
+
+- [세션 충돌](https://github.com/openai/codex/issues/11435) — 병렬 인스턴스가 공유 세션 복원으로 서로 간섭
+- [크래시 & 출력 잘림](https://github.com/openai/codex/issues/10887) — 리소스 집약 병렬 작업이 세션 종료 유발
+
+**codex-mcp-runner**가 이를 해결합니다:
+
+| | `codex exec` x N 직접 실행 | codex-mcp-runner |
+|--|---|---|
+| 병렬 실행 | 가능하지만 불안정 | 안정적 (worktree 격리) |
+| 세션 충돌 | 공유 상태 간섭 | 각 작업이 독립된 git worktree에서 실행 |
+| 보안 | 경계 없음 | 6단계 방어 (명령어 허용 목록, 경로 제한, 환경 정제) |
+| 결과 수집 | 수동 | 패치, 로그, 증거 포함 구조화된 출력 |
+| 정리 | 수동 | 완료/타임아웃/크래시 시 자동 정리 |
+| 통합 | CLI만 가능 | **MCP 표준** — Claude, Cursor 등 모든 MCP 클라이언트에서 사용 가능 |
 
 ## 개요
 
-`codex-mcp-runner`는 Claude와 Codex CLI 사이의 작업 조율자 역할을 하는 MCP(Model Context Protocol) 서버입니다. Claude가 다음을 수행할 수 있게 합니다:
+`codex-mcp-runner`는 완전한 격리와 보안으로 Codex CLI 작업을 병렬 조율하는 MCP(Model Context Protocol) 서버입니다. 모든 MCP 클라이언트에서 다음을 수행할 수 있습니다:
 
-- 설정 가능한 동시성으로 여러 Codex 작업을 병렬로 실행
-- 각 작업을 자신의 git worktree에 격리하여 간섭 방지
+- 설정 가능한 동시성으로 여러 Codex 작업을 병렬로 실행 (최대 8개)
+- 각 작업을 자신의 git worktree에 격리하여 세션 충돌 방지
 - 보안 정책에 따라 패치 및 파일 수정사항 검증
 - 명령어 로그, 파일 변경사항 및 증거를 포함한 구조화된 결과 수집
 - 완성도 및 병렬화 기회에 대한 개발 계획 검토
 
-이 서버는 Claude의 계획 및 검토 기능을 Codex의 자동화된 코드 실행과 연결하여, 안전하고 감시되며 재현 가능한 다단계 코드 생성 워크플로우를 실현합니다.
+MCP 클라이언트의 계획 기능을 Codex의 자동화된 코드 실행과 연결하여, 안전하고 감시되며 재현 가능한 다단계 코드 생성 워크플로우를 실현합니다.
 
 ## 아키텍처
 

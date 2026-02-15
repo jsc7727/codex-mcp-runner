@@ -1,23 +1,42 @@
 # codex-mcp-runner
 
 [![npm version](https://img.shields.io/npm/v/codex-mcp-runner.svg)](https://www.npmjs.com/package/codex-mcp-runner)
+[![npm downloads](https://img.shields.io/npm/dm/codex-mcp-runner.svg)](https://www.npmjs.com/package/codex-mcp-runner)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **English** | [한국어](README.ko.md)
 
-MCP server that enables Claude to orchestrate parallel OpenAI Codex CLI tasks in isolated git worktrees.
+> Run parallel Codex CLI tasks **safely** — isolated in git worktrees, secured by 6 defense layers.
+
+## Why?
+
+Running multiple `codex exec` processes concurrently is possible, but **unstable**:
+
+- [Session conflicts](https://github.com/openai/codex/issues/11435) — parallel instances interfere via shared session restore
+- [Crashes & truncated output](https://github.com/openai/codex/issues/10887) — resource-intensive parallel tasks cause session termination
+
+**codex-mcp-runner** solves this:
+
+| | Raw `codex exec` x N | codex-mcp-runner |
+|--|---|---|
+| Parallel execution | Possible but unstable | Stable (worktree isolation) |
+| Session conflicts | Shared state interference | Each task in its own git worktree |
+| Security | No boundaries | 6-layer defense (command allowlist, path restrictions, env sanitization) |
+| Result collection | Manual | Structured output with patches, logs, and evidence |
+| Cleanup | Manual | Automatic on completion, timeout, or crash |
+| Integration | CLI only | **MCP standard** — works with Claude, Cursor, and any MCP client |
 
 ## Overview
 
-`codex-mcp-runner` is an MCP (Model Context Protocol) server that acts as a task orchestrator between Claude and the Codex CLI. It allows Claude to:
+`codex-mcp-runner` is an MCP (Model Context Protocol) server that orchestrates parallel Codex CLI tasks with full isolation and security. It allows any MCP client to:
 
-- Run multiple Codex tasks in parallel with configurable concurrency
-- Isolate each task in its own git worktree to prevent interference
+- Run multiple Codex tasks in parallel with configurable concurrency (up to 8)
+- Isolate each task in its own git worktree to prevent session conflicts
 - Validate patches and file modifications against security policies
 - Collect structured results with command logs, file changes, and evidence
 - Review development plans for completeness and parallelization opportunities
 
-The server bridges Claude's planning and review capabilities with Codex's autonomous code execution, enabling safe, audited, and reproducible multi-step code generation workflows.
+The server bridges your MCP client's planning capabilities with Codex's autonomous code execution, enabling safe, audited, and reproducible multi-step code generation workflows.
 
 ## Architecture
 
